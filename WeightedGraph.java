@@ -65,4 +65,44 @@ public class WeightedGraph<V>{
             }
         }
     }
+    public Map<Vertex<V>, Double> Dijkstra(Vertex<V> start) {
+        Map<Vertex<V>, Double> distances = new HashMap<>();
+        for (Vertex<V> vertex : adjacencyList.keySet()) {
+            distances.put(vertex, Double.POSITIVE_INFINITY);
+        }
+        distances.put(start, 0.0);
+
+        PriorityQueue<Vertex<V>> priorityQueue = new PriorityQueue<>(Comparator.comparingDouble(distances::get));
+        priorityQueue.add(start);
+
+        while (!priorityQueue.isEmpty()) {
+            Vertex<V> vertex = priorityQueue.poll();
+            double distance = distances.get(vertex);
+
+            for (Map.Entry<Vertex<V>, Double> entry : vertex.getAdjacentVertices().entrySet()) {
+                Vertex<V> neighbor = entry.getKey();
+                double weight = entry.getValue();
+                double newDistance = distance + weight;
+
+                if (newDistance < distances.get(neighbor)) {
+                    priorityQueue.remove(neighbor);
+                    distances.put(neighbor, newDistance);
+                    priorityQueue.add(neighbor);
+                }
+            }
+        }
+        return distances;
+    }
+
+    public void printGraph() {
+        for (Map.Entry<Vertex<V>, List<Vertex<V>>> entry : adjacencyList.entrySet()) {
+            Vertex<V> vertex = entry.getKey();
+            List<Vertex<V>> neighbors = entry.getValue();
+            System.out.print("Vertex " + vertex.getData() + " is connected to: ");
+            for (Vertex<V> neighbor : neighbors) {
+                System.out.print(neighbor.getData() + " ");
+            }
+            System.out.println();
+        }
+    }
 }
