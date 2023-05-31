@@ -42,4 +42,27 @@ public class WeightedGraph<V>{
         validateVertex(vertex);
         return adjacencyList.get(vertex);
     }
+    public void BFS(Vertex<V> start) {
+        Map<Vertex<V>, Boolean> visited = new HashMap<>();
+        for (Vertex<V> vertex : adjacencyList.keySet()) {
+            visited.put(vertex, false);
+        }
+
+        Queue<Vertex<V>> queue = new LinkedList<>();
+        visited.put(start, true);
+        queue.add(start);
+
+        while (!queue.isEmpty()) {
+            Vertex<V> vertex = queue.poll();
+            System.out.print(vertex.getData() + " ");
+
+            List<Vertex<V>> neighbors = adjacencyList.get(vertex);
+            for (Vertex<V> neighbor : neighbors) {
+                if (!visited.get(neighbor)) {
+                    visited.put(neighbor, true);
+                    queue.add(neighbor);
+                }
+            }
+        }
+    }
 }
